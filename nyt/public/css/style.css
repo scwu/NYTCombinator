@@ -7,6 +7,7 @@ body {
   font-family: 'Stoke', serif;
   font-weight: 300;
   margin: 0 auto;
+  height: 100%;
 }
 
 div#page {
@@ -50,4 +51,39 @@ em#more {
 
 em#more:hover {
   color: grey;
+}
+
+#lightbox {
+  position: absolute;
+  top: 0;
+  left: 35%;
+  width: 900px;
+  height: 500px;
+  overflow: scroll;
+  margin-left: -250px;
+  background: #fff;
+  z-index: 1001;
+  display: none;
+  border-radius: 8px;
+}
+#lightbox p {
+  padding-left: 20px;
+  padding-right: 10px;
+  text-align: left;
+}
+#lightbox-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background: #000;
+  filter: alpha(opacity=75);
+  -moz-opacity: 0.75;
+  -khtml-opacity: 0.75;
+  opacity: 0.75;
+  z-index: 1000;
+  display: none;
+  overflow: auto;
 }
