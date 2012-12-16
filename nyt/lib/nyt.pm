@@ -1,6 +1,9 @@
 package nyt;
 use Dancer;
 set serializer => 'JSON';
+set logger => 'console';
+set 'log' => 'debug';
+set 'show_errors' => 1;
 use JSON;
 use XML::Simple;
 use Data::Dumper;
@@ -50,6 +53,34 @@ ajax '/getbody' => sub {
   my $json_text = to_json(\%data);
   $tree->delete();
   return $json_text
+};
+
+get '/popular' => sub {
+  template 'popular.tt';
+};
+
+ajax '/getshared' => sub {
+  my $key = '';
+  my $uri_shared =  'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/';
+  my $response = request->params->{type};
+  if ($response == '1') {
+    my $uri = $uri_shared . '1?api-key=' . $key;
+	  my $browser =  LWP::UserAgent->new();
+	  my $response = $browser->get($uri)->content;    
+    return $response;
+  }
+  if ($response == '7') {
+    my $uri = $uri_shared . '7?api-key=' . $key;
+	  my $browser =  LWP::UserAgent->new();
+	  my $response = $browser->get($uri)->content;  
+    return $response;
+  }
+  if ($response == '30') {
+    my $uri = $uri_shared . '30?api-key=' . $key;
+    my $browser =  LWP::UserAgent->new();
+    my $response = $browser->get($uri)->content;  
+    return $response;
+  }
 };
 
 true;
