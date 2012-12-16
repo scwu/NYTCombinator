@@ -63,7 +63,7 @@ get '/popular' => sub {
   template 'popular.tt';
 };
 #gets the most popular results by sending a get request to the nyt API and using 
-#//this information. Depending on which button you click on, sends a different ajax request
+#//this information. Depending on which button you click on, sends a different ajax request<D-s>
 ajax '/getshared' => sub {
   my $key = '';
   my $uri_shared =  'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/';
