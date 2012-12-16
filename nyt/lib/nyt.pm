@@ -65,13 +65,13 @@ ajax '/getshared' => sub {
   my $response = request->params->{type};
   if ($response == '1') {
     my $uri = $uri_shared . '1?api-key=' . $key;
-	  my $browser =  LWP::UserAgent->new();
+    my $browser =  LWP::UserAgent->new();
 	  my $response = $browser->get($uri)->content;    
     return $response;
   }
   if ($response == '7') {
     my $uri = $uri_shared . '7?api-key=' . $key;
-	  my $browser =  LWP::UserAgent->new();
+    my $browser =  LWP::UserAgent->new();
 	  my $response = $browser->get($uri)->content;  
     return $response;
   }
