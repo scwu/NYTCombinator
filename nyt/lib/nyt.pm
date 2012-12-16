@@ -20,6 +20,7 @@ get '/' => sub {
   my %hash;
   my $browser= LWP::UserAgent->new();
   my $response = $browser->get($rss_feed);
+  #getting the page contents
   my $xml_content = $response->content;
   #my $xml_content = get($rss_feed) or warn "Can't get XML page" / "\n";
   my $xml2 = XML::Simple->new(KeepRoot => 1);
@@ -36,6 +37,7 @@ get '/' => sub {
     template 'index.tt', { 'hash' => \%hash, };
 };
 
+#gets the content of the page(the article itself) with ajax
 ajax '/getbody' => sub {
   my @full_cont = ();
   my $full_link = request->params->{link};
@@ -43,6 +45,7 @@ ajax '/getbody' => sub {
   my $m = WWW::Mechanize->new();
   $m->get($full_link);
   my $c = $m->content;
+  #crawls the page for the div we want
   my $tree = HTML::TreeBuilder->new_from_content($c);
   for my $div ($tree->look_down(_tag => "div", class => "articleBody")) {
     my $body = $div->as_HTML();
@@ -50,6 +53,7 @@ ajax '/getbody' => sub {
   }
   my $body = $full_cont[1]; 
   my %data = (content => $body);
+  #sends the result as json
   my $json_text = to_json(\%data);
   $tree->delete();
   return $json_text
@@ -58,7 +62,8 @@ ajax '/getbody' => sub {
 get '/popular' => sub {
   template 'popular.tt';
 };
-
+#gets the most popular results by sending a get request to the nyt API and using 
+#//this information. Depending on which button you click on, sends a different ajax request
 ajax '/getshared' => sub {
   my $key = '';
   my $uri_shared =  'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/';
