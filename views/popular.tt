@@ -1,0 +1,8 @@
+<script type="text/javascript" src="../javascripts/popular.js"></script>
+</head>
+<h2>Most Popular Posts at the New York Times</h2>
+<a href="" class="length" id="1">in one day</a>
+<a href="" class="length" id="7">in one week</a>
+<a href="" class="length" id="30">in one month</a>
+<div id="page">
+</div>
