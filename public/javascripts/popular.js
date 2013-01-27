@@ -11,7 +11,8 @@ function getPopular(type) {
         var date = v.published_date;
         items.push('<ul id="' + count +'">' 
                      + '<li id = "name"><a href="' + url + '" class="link" id="' + count + '">' + title + '</a>' + '</li>'  + '<li id ="date">' + date + '</li>' 
-                    + '<li id="activity">' + abstract + '</li><li class="read"><input type="button" id="' +count + '" class="read" value="Read more"></input></li>' + '</ul>');
+                    + '<li id="activity">' + abstract + '</li><li class="read"><input type="button" id="' +count + '" class="read" value="Read more"></input></li>' + 
+                    '<li class="data"><input type="button" id="' +count + '" class="read" value="view data"></input></li>' + '</ul>');
 
         count++;
       });
@@ -89,7 +90,6 @@ $(document).ready(function() {
     var url = $('.link').filter('#' + id).attr('href');
   });
     $(document).on("click", ".read", function(){
-    console.log("hi i clicked");
     var id = $(this).attr('id');
     var url = $('.link').filter('#' + id).attr('href');
     console.log(id);

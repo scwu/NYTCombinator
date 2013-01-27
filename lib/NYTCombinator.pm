@@ -11,6 +11,7 @@ use HTML::TreeBuilder;
 use LWP;
 use Template;
 use Dancer::Plugin::Ajax;
+use URI::Escape;
 
 our $VERSION = '0.1';
 
@@ -59,19 +60,46 @@ ajax '/getbody' => sub {
 };
 
 ajax '/getcomments' => sub {
-	my %comment_list = ();
-	my $comment_api='2618d5e23be49c1226361cbf16fea71a:3:67053910';
-	my $base_uri_comment='http://api.nytimes.com/svc/community/v2/comments/url/exact-match.json?url=';
 	my $url_comments = request->params->{url};
-	$final_url_comments = uri_escape($url_comments);
-	for ($count = 0; $count >= 500; $count + 25) {
-		$comment_call = $base_uri_comment . $final_url_comments . '&[offset=' . $count . ']&api-key=' . $comment_api;
-		my $browser_comments = LWP::UserAgent->new();
-		my $comments = $browser->get($comment_call)->content;
-		my %result = from_json($comments);
-		%comment_list = (%comment_list, %result);
-	}
-	return %comment_list;
+  my $find1 = ':';
+  $find1 = quotemeta $find1;
+  my $replace1 = '%253A';
+  $url_comments =~ s/$find1/$replace1/g;
+  my $find2 = '/';
+  $find2 = quotemeta $find2;
+  my $replace2 = '%252F';
+  $url_comments =~ s/$find2/$replace2/g;
+  my $offset=0; #Start off at the very beginning
+  my $total_comments=1; #set a fake minimum number of contents
+  my %comment_list=(); #Set up a place to store the results
+  my @array = ();
+  my $count = 0;
+  while ($total_comments > $offset) {
+      my $url='http://www.nytimes.com/svc/community/V3/requestHandler?callback=NYTD.commentsInstance.drawComments&method=get&cmd=GetCommentsAll&url=' . $url_comments . '&offset=' . $offset  . '&sort=newest'; #store the secret URL
+      sleep(1);
+      my $browser =  LWP::UserAgent->new();
+      my $response = $browser->get($url)->content; 
+      my $find = 'NYTD.commentsInstance.drawComments(';
+      $find = quotemeta $find;
+      $response =~ s/$find/""/g;
+      my $substr = substr($response, 2, -2);
+      my $json = new JSON;
+      my $json_text = $json->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($substr);
+      foreach my $comment(@{$json_text->{results}->{comments}}){
+          $count += 1;
+          print $count, "\n";
+          my %comment_hash = ();
+          $comment_hash{name} = $comment->{userID};
+          $comment_hash{location} = $comment->{userLocation};
+          $comment_hash{body} = $comment->{commentBody};
+          push @array, \%comment_hash;
+      }
+      if ($substr =~ m/totalCommentsFound\":(.*?),/) {
+          $total_comments =  $1;
+      }
+      $offset=$offset+25;
+  }
+  return @array;
 };
 
 get '/popular' => sub {
