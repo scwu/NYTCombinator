@@ -12,7 +12,7 @@ function getPopular(type) {
         items.push('<ul id="' + count +'">' 
                      + '<li id = "name"><a href="' + url + '" class="link" id="' + count + '">' + title + '</a>' + '</li>'  + '<li id ="date">' + date + '</li>' 
                     + '<li id="activity">' + abstract + '</li><li class="read"><input type="button" id="' +count + '" class="read" value="Read more"></input></li>' + 
-                    '<li class="data"><input type="button" id="' +count + '" class="read" value="view data"></input></li>' + '</ul>');
+                    '<li class="data"><input type="button" id="' +count + '" class="data" value="view data"></input></li>' + '</ul>');
 
         count++;
       });
@@ -90,13 +90,24 @@ $(document).ready(function() {
     var url = $('.link').filter('#' + id).attr('href');
   });
     $(document).on("click", ".read", function(){
-    var id = $(this).attr('id');
-    var url = $('.link').filter('#' + id).attr('href');
-    console.log(id);
-    console.log(url);
-    lightbox(null, url);
-    return false;
+      var id = $(this).attr('id');
+      var url = $('.link').filter('#' + id).attr('href');
+      console.log(id);
+      console.log(url);
+      lightbox(null, url);
+      return false;
   });
+    $(document).on("click", ".data", function(){
+      var id = $(this).attr('id');
+      var url = $('.link').filter('#' + id).attr('href');
+      var body;
+      console.log("data");
+      $.getJSON('/getcomments', { url : url }, function(response) {
+            body = response.location;
+      });
+      lightbox(body, url);
+      return false;
+    });
 });
 
 
