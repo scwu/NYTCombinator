@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=<% settings.charset %>" />
-<title>nyt</title>
+<title>New York Times Combinator</title>
 <link rel="stylesheet" href="../css/style.css" />
 
 <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
@@ -11,11 +11,20 @@
 <script type="text/javascript">/* <![CDATA[ */
     !window.jQuery && document.write('<script type="text/javascript" src="<% request.uri_base %>/javascripts/jquery.js"><\/script>')
       /* ]]> */</script>
-   <link href='http://fonts.googleapis.com/css?family=Stoke' rel='stylesheet' type='text/css'> 
-
+   <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,200' rel='stylesheet' type='text/css'>
+ <script type="text/javascript" src="../javascripts/script.js"></script>
+</head>
+<body>
+	<div class="header">
+		<img src="../images/logo.jpg" alt="logo"/>
+	</div>
+	<div class="line-separator"></div>
+		<ul id="nav">
+			<li><a href="/">Recent</a></li>
+			<li><a href="/popular">Most Popular</a></li>
+			<li><a href="/date">By Date</a></li>
+		</ul>
+	<div class="line-separator"></div>
 [% content %]
-<div id="footer">
-Made with love by <a href="http://www.clarawu.com/">Clara Wu</a>
-</div>
 </body>
 </html>
